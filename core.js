@@ -1,4 +1,3 @@
-
 // holds data from local storage
 var personsData = {};
 // total person count of local storage
@@ -11,7 +10,6 @@ const Rollnum = document.getElementById("Rollnum");
 const Rollname = document.getElementById("Rollname");
 const nameList = document.getElementById("lists");
 
-
 function updateLocal() {
   //update local
   localStorage.setItem("personsData", JSON.stringify(personsData));
@@ -22,6 +20,11 @@ function retrieveLocal() {
   //retrieve local
   const storedData = localStorage.getItem("personsData");
   personsData = JSON.parse(storedData);
+
+  if (!personsData) {
+    updateList();
+    personsData = {};
+  }
 
   //update count from local
   totalPersons = Object.keys(personsData).length;
@@ -42,18 +45,16 @@ function updateList() {
                             </li>`;
   }
 
-  if(totalPersons == 0){
-    nameList.innerHTML = "<li>feeling so empty</li>"
+  if (totalPersons == 0) {
+    nameList.innerHTML = "<li>feeling so empty</li>";
   }
 }
 
-homeInputName.addEventListener("keydown", (e)=>{
-    if(e.key === 'Enter'){
-        addInputName()
-    }
-})
-
-
+homeInputName.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    addInputName();
+  }
+});
 
 function addInputName() {
   if (homeInputName.value.length > 0) {
@@ -71,17 +72,17 @@ function addInputName() {
     setTimeout(() => {
       clearInterval(interval);
       let id = condtnRandomizer(random, 100);
-      
+
       Rollnum.textContent = id;
       personsData[totalPersons + 1] = { id: id, name: homeInputName.value };
 
       updateLocal();
 
       setTimeout(() => {
-        homeInputName.value = ""
+        homeInputName.value = "";
         inputDisplayArea.classList.add("input-active");
         inputDisplayArea.classList.remove("display-active");
-        homeInputName.focus()
+        homeInputName.focus();
       }, 2500);
     }, 3000);
   }
@@ -106,16 +107,15 @@ function condtnRandomizer(num, limit) {
 }
 
 //deleting only one
-function deleteOne(id){
-    delete personsData[id]
-    updateLocal()
+function deleteOne(id) {
+  delete personsData[id];
+  updateLocal();
 }
 
 //admin function
-function resetAll(){
-    personsData = {}
-    updateLocal()
+function resetAll() {
+  personsData = {};
+  updateLocal();
 }
-
 
 retrieveLocal();
